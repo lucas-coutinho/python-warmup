@@ -16,7 +16,8 @@ To spare our lives, we designed a ETL framework using python standard types, e.g
 To use the modules developed, clone this repo and, inside the directory `~/path_to_cloned_repo/python-warmup`, create every test file or script.
 
 ```python
-from modules import DataFrame
+from modules import DataFrame, mean, std #to use every function or class described in the module.py we need to import them
+
 
 df = DataFrame(<path_to_dataset>, sep=<dataset_separator>, columns=<list_of_columns_names>)
 ```

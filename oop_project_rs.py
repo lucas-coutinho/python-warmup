@@ -1,6 +1,8 @@
-from abc import ABC
-from .utils import cos_sim
-from .utils import pearson_corr
+from abc import ABC, abstractmethod
+from utils import cos_sim
+from utils import pearson_corr
+
+__all__ = ["User"]
 
 class User:
     """Defines an User entity.
@@ -22,14 +24,19 @@ class User:
     
         self.id, self.age, self.occupation, self.zip_code = id, age, occupation, zip_code
 
+        self._similarity = DistanceCollection(self)
+
     def classify_movie(self, movie, rate):
         raise NotImplemented()
 
     def mean_classification(self):
         raise NotImplemented()
-
-    def similarity(self, other_user):
-        raise NotImplemented()
+    
+    @property
+    def similarity(self):
+        
+        return self._similarity
+        
 
 
 class DistanceAlgorithm(ABC):
@@ -42,9 +49,7 @@ class DistanceAlgorithm(ABC):
 class CossineDistance(DistanceAlgorithm):
     """Cossine distance of two `d`-dimensioned points.
     """
-    def __call__(self, *items):
-        item1= items[0]
-        item2= items[1]
+    def __call__(self, item1, item2):
 
         return self.distance_between(item1, item2)
 
@@ -56,15 +61,29 @@ class CossineDistance(DistanceAlgorithm):
 class PearsonCorrelation(DistanceAlgorithm):
     """Pearson Correlation of two `d`-dimensioned points.
     """
-    def __call__(self, *items):
-        item1= items[0]
-        item2= items[1]
+    def __call__(self, item1, item2):
 
         return self.distance_between(item1, item2)
 
     def distance_between(self, item1, item2):
         
         return pearson_corr(item1, item2)
+
+class DistanceCollection:
+    """Collection of distance functions.
+    """
+    def __init__(self, user1: User):
+        self.user1 = user1
+
+    def cos(self, user2):
+        return "oi" if isinstance(user2, User) else "fail"
+
+        return CossineDistance()(self.user1, user2)
+
+    def pearson(self, user2):
+        return "oi" if isinstance(user2, User) else "fail"
+        return PearsonCorrelation()(self.user1, user2)
+
 
 class Movie:
     """Defines a Movie entity.

@@ -76,12 +76,11 @@ class DistanceCollection:
         self.user1 = user1
 
     def cos(self, user2):
-        return "oi" if isinstance(user2, User) else "fail"
 
         return CossineDistance()(self.user1, user2)
 
     def pearson(self, user2):
-        return "oi" if isinstance(user2, User) else "fail"
+
         return PearsonCorrelation()(self.user1, user2)
 
 

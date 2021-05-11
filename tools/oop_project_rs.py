@@ -100,9 +100,6 @@ class Movie:
     ):
         self.name, self.release_date, self.genre = name, release_date, genre
 
-    def add_rating(self, rate):
-        raise NotImplemented()
-
 
 class Rating:
     """Defines a Rating entity.

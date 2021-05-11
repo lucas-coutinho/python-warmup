@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
-from utils import cos_sim
-from utils import pearson_corr
+from .utils import cos_sim
+from .utils import pearson_corr
 
 __all__ = ["User"]
 
@@ -25,13 +25,19 @@ class User:
         self.id, self.age, self.occupation, self.zip_code = id, age, occupation, zip_code
 
         self._similarity = DistanceCollection(self)
+        self._ratings = []
 
     def classify_movie(self, movie, rate):
-        raise NotImplemented()
+        self._ratings.append(Rating(rate, movie, self))
 
     def mean_classification(self):
         raise NotImplemented()
     
+    @property
+    def retings(self):
+
+        return self._ratings
+
     @property
     def similarity(self):
         

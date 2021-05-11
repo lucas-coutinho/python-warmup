@@ -36,7 +36,6 @@ class User:
     def similarity(self):
         
         return self._similarity
-        
 
 
 class DistanceAlgorithm(ABC):
@@ -104,16 +103,26 @@ class Movie:
     def add_rating(self, rate):
         raise NotImplemented()
 
+
 class Rating:
     """Defines a Rating entity.
 
     Attributes:
         rate (int):
             rating of a movie.
+        movie (Movie):
+            movie associeated to the rating.
+        user (User):
+            user associeated to the movie rating.
     """
-    def __init__(self, rate: int):
-        self.rate = rate
-    
+    def __init__(self, rate: int,
+                 movie: Movie,
+                 user:  User,
+    ):
+
+        self.user, self.movie, self.rate = user, movie, rate
+
+        
 
 class Genre:
     """Defines a Genre entity.

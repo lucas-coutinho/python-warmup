@@ -31,10 +31,12 @@ class User:
         self._ratings.append(Rating(rate, movie, self))
 
     def mean_classification(self):
-        raise NotImplemented()
+        return sum([
+            rating.rate for rating in self.ratings
+        ]) / len(self.ratings)
     
     @property
-    def retings(self):
+    def ratings(self):
 
         return self._ratings
 

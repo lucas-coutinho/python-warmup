@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from .utils import cos_sim
 from .utils import pearson_corr
 
-__all__ = ["User"]
+__all__ = ["User", "Movie", "CollabFilteringHelper", "DifferentType"]
 
 class User:
     """Defines an User entity.
@@ -25,10 +25,11 @@ class User:
         self.id, self.age, self.occupation, self.zip_code = id, age, occupation, zip_code
 
         self._similarity = DistanceCollection(self)
-        self._ratings = []
+        self._ratings = {}
 
     def classify_movie(self, movie, rate):
-        self._ratings.append(Rating(rate, movie, self))
+        rating = Rating(rate, movie, self)
+        self._ratings[rating.movie.name] = rating
 
     def mean_classification(self):
         return sum([
@@ -75,18 +76,17 @@ class CollabFilteringHelper:
     def feature_matrix(self):
         """TODO: data structure to handle with vectorial operations
         """
-        feature_set = list(
-            set(self.item1.ratings.keys() + self.item2.ratings.keys() )
-        )[1:]
-
+        feature_set = sorted(list(
+            set(list(self.item1.ratings.keys()) + list( self.item2.ratings.keys() ))
+        ))
 
 
         features = [[0]*len(feature_set) for _ in range(2)]
         
-        for key, value in self.item1.ratings:
+        for key, value in self.item1.ratings.items():
             features[0][feature_set.index(key)] = value.rate
         
-        for key, value in self.item2.ratings:
+        for key, value in self.item2.ratings.items():
             features[1][feature_set.index(key)] = value.rate
 
         return features

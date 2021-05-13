@@ -46,6 +46,56 @@ class User:
         return self._similarity
 
 
+class DifferentType(Exception): pass
+
+class CollabFilteringHelper:
+    """Helps some entity to compute its similarity to another entity instance.
+
+    Looks for raw data in the entity and returns a `2 x N` feature matrix.
+
+    Atrributes:
+        item1 (enitity):
+            first entity.
+        item2 (enitity):
+            second entity.
+    Raises:
+        DifferentType: both entities are not the same type.
+    ..note:
+    make sure both entities are the same type.
+    """
+    def __init__(self, item1, item2):
+
+        if isinstance(item1, User) and isinstance(item2, User): pass
+        elif isinstance(item1, Movie) and isinstance(item2, Movie): pass
+        else:
+            raise DifferentType("item 1 and item 2 are note from different types {} !- {}".format(type(item1), type(item2)))
+
+        self.item1, self.item2 = item1, item2
+
+    def feature_matrix(self):
+        """TODO: data structure to handle with vectorial operations
+        """
+        feature_set = list(
+            set(self.item1.ratings.keys() + self.item2.ratings.keys() )
+        )[1:]
+
+
+
+        features = [[0]*len(feature_set) for _ in range(2)]
+        
+        for key, value in self.item1.ratings:
+            features[0][feature_set.index(key)] = value.rate
+        
+        for key, value in self.item2.ratings:
+            features[1][feature_set.index(key)] = value.rate
+
+        return features
+
+
+
+
+        
+
 class DistanceAlgorithm(ABC):
     """Abstract class for distance algorithms.
     """

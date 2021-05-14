@@ -31,7 +31,7 @@ class User:
         rating = Rating(rate, movie, self)
         self._ratings[rating.movie.name] = rating
         if self.id not in  movie.ratings:
-            movie.classify_movie(self, rate)
+            movie._classify_movie(self, rate)
 
 
     def mean_classification(self):
@@ -162,7 +162,7 @@ class Movie:
         self._similarity = DistanceCollection(self)
         self._ratings = {}
 
-    def classify_movie(self, user, rate):
+    def _classify_movie(self, user, rate):
         rating = Rating(rate, self, user)
         self._ratings[rating.user.id] = rating
         if self.name not in  user.ratings:
@@ -229,3 +229,32 @@ class RecommendationSystem:
 
     def __init__(self, name: str):
         self.name = name
+
+        self.users = { 
+            id: User(id, age, occupation, zip) for id, age, 
+                                                   gender, occupation, zip 
+                                                in self.load('ml-100k/u.user', '|')
+        }
+
+        self.movies = {
+            id: Movie(name, release_date, genre_tuple) for id, name, release_date, _, _, genre_tuple
+                                                       in self.load('ml-100k/u.item', '|')
+        }
+
+    def recommend_by_user(self, user, number):
+        raise NotImplemented()
+
+    def recommend_by_movie(self, movie, number):
+        raise NotImplemented()
+
+
+    def load(self, path, separator):
+        data=[]
+        with open(path, encoding = "ISO-8859-1") as f:
+            for line in  f.readlines():
+                data.append(
+                    tuple(
+                            map(lambda x: x.rstrip(), line.split(sep=separator))
+                        )
+                    )
+        return data

@@ -92,13 +92,10 @@ class CollabFilteringHelper:
         return features
 
 
-
-
-        
-
 class DistanceAlgorithm(ABC):
     """Abstract class for distance algorithms.
     """
+    
     @abstractmethod
     def distance_between(self, item1, item2):
         raise NotImplemented()
@@ -107,7 +104,8 @@ class CossineDistance(DistanceAlgorithm):
     """Cossine distance of two `d`-dimensioned points.
     """
     def __call__(self, item1, item2):
-
+        
+        item1, item2 = CollabFilteringHelper(item1, item2).feature_matrix()
         return self.distance_between(item1, item2)
 
     def distance_between(self, item1, item2):
@@ -120,6 +118,7 @@ class PearsonCorrelation(DistanceAlgorithm):
     """
     def __call__(self, item1, item2):
 
+        item1, item2 = CollabFilteringHelper(item1, item2).feature_matrix()
         return self.distance_between(item1, item2)
 
     def distance_between(self, item1, item2):

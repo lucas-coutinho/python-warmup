@@ -30,6 +30,9 @@ class User:
     def classify_movie(self, movie, rate):
         rating = Rating(rate, movie, self)
         self._ratings[rating.movie.name] = rating
+        if self.id not in  movie.ratings:
+            movie.classify_movie(self, rate)
+
 
     def mean_classification(self):
         return sum([
@@ -156,7 +159,31 @@ class Movie:
                  genre: str,
     ):
         self.name, self.release_date, self.genre = name, release_date, genre
+        self._similarity = DistanceCollection(self)
+        self._ratings = {}
 
+    def classify_movie(self, user, rate):
+        rating = Rating(rate, self, user)
+        self._ratings[rating.user.id] = rating
+        if self.name not in  user.ratings:
+            user.classify_movie(self, rate)
+
+
+
+    def mean_classification(self):
+        return sum([
+            rating.rate for rating in self.ratings
+        ]) / len(self.ratings)
+    
+    @property
+    def ratings(self):
+
+        return self._ratings
+
+    @property
+    def similarity(self):
+        
+        return self._similarity
 
 class Rating:
     """Defines a Rating entity.

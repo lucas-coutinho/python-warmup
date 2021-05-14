@@ -2,7 +2,8 @@ from abc import ABC, abstractmethod
 from .utils import cos_sim
 from .utils import pearson_corr
 
-__all__ = ["User", "Movie", "CollabFilteringHelper", "DifferentType"]
+__all__ = ["User", "Movie", "CollabFilteringHelper", "DifferentType",
+           "RecommendationSystem"]
 
 class User:
     """Defines an User entity.
@@ -241,10 +242,17 @@ class RecommendationSystem:
                                                        in self.load('ml-100k/u.item', '|')
         }
 
-    def recommend_by_user(self, user, number):
-        raise NotImplemented()
+    def recommend_by_user(self, query, number):
 
-    def recommend_by_movie(self, movie, number):
+        return [ 
+           user for _, user in sorted(self.users.items() , 
+                                      key = lambda entry: query.similarity.cos(entry[1])
+            )[1:number+1]
+        ]
+
+        
+
+    def recommend_by_movie(self, query, number):
         raise NotImplemented()
 
 
@@ -258,3 +266,5 @@ class RecommendationSystem:
                         )
                     )
         return data
+
+

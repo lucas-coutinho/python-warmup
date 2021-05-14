@@ -242,7 +242,7 @@ class RecommendationSystem:
                                                        in self.load('ml-100k/u.item', '|')
         }
 
-    def recommend_by_user(self, query, number):
+    def users_most_similar_with(self, query, number):
 
         return [ 
            user for _, user in sorted(self.users.items() , 
@@ -252,8 +252,13 @@ class RecommendationSystem:
 
         
 
-    def recommend_by_movie(self, query, number):
-        raise NotImplemented()
+    def movies_most_simialr_with(self, query, number):
+
+        return [ 
+           movie for _, movie in sorted(self.movies.items() , 
+                                      key = lambda entry: query.similarity.cos(entry[1])
+            )[1:number+1]
+        ]
 
 
     def load(self, path, separator):

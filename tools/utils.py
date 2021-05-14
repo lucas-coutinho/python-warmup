@@ -14,6 +14,10 @@ def cos_sim(point1, point2) -> float:
 def diff(point1, point2) -> float:
     return sum([point1[i] - point2[i] for i in range(len(point1))])
 
+
+def mean(set):
+    return sum(set)/len(set)
+
 def pearson_corr(point1, point2) -> float:
     def dot(point1,  point2) -> float:
         u1 = mean(point1)

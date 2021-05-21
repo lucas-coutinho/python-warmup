@@ -2,3 +2,4 @@
 *.ipynb_checkpoints
 ml-100k
 test*
+.vscode
